@@ -1,20 +1,3 @@
-/**********************************************************************************************************
- *   Copyright  SinoChip Semiconductor Tech Corp             							  *
- *   All rights reserved.                                                      							  *
- *--------------------------------------------------------------------------------------------------------*
- *   This confidential and proprietary software must be used
- *   only as authorized by a licensing agreement from SCSemicon, Ltd.
- *   All Rights Reserved.
- * * Copyright    : SCSemicon Tech. Co., Ltd
- * * File name    : fs.c
- * * Description  : file system for cos
- * *
- * * Author       : yuxi sun
- * * Version      : 0.1
- * * Date         : 2020.03.16
- * * History      : none
- * *
-***********************************************************************************************************/
 #include        <demo_cmd.h>
 #include        <usb300_main.h>
 #include        <usb300_bot.h>
@@ -25,27 +8,27 @@
 /**********************************************************************************************************/
 #define          FS_TST_DEBUG                (1)
 /**********************************************************************************************************/
-#define          FS_CONNECT                  (0x00)                                  // Á¬½Ó
-#define          FS_RD                       (0x01)                                  // ¶ÁÈ¡      
-#define          FS_WR                       (0x02)                                  // Ğ´Èë
-#define          FS_DEL                      (0x03)                                  // ¼ì²â
-#define          FS_CHK                      (0x04)                                  // ²Á³ı
+#define          FS_CONNECT                  (0x00)                                  // è¿æ¥
+#define          FS_RD                       (0x01)                                  // è¯»å–      
+#define          FS_WR                       (0x02)                                  // å†™å…¥
+#define          FS_DEL                      (0x03)                                  // æ£€æµ‹
+#define          FS_CHK                      (0x04)                                  // æ“¦é™¤
 #define          FS_REV                      (0x05)                                  //
-#define          FS_FLASH_RD                 (0x06)                                  // Ö±½Ó¶ÁÈ¡PA
-#define          FS_CLEAR                    (0x07)                                  // ÎÄ¼şÏµÍ³Çå³ı
-#define          FS_REBOOT                   (0x08)                                  // Ğ¾Æ¬ÖØÆô
-#define          FS_GET_FREE                 (0x09)                                  // »ñÈ¡¿ÕÏĞÈİÁ¿
-#define          FS_GET_ID_LEN               (0x10)                                  // »ñÈ¡Ä³¸öID³¤¶È
-#define          FS_PRINT_LA                 (0x11)                                  // ´òÓ¡LA±í
+#define          FS_FLASH_RD                 (0x06)                                  // ç›´æ¥è¯»å–PA
+#define          FS_CLEAR                    (0x07)                                  // æ–‡ä»¶ç³»ç»Ÿæ¸…é™¤
+#define          FS_REBOOT                   (0x08)                                  // èŠ¯ç‰‡é‡å¯
+#define          FS_GET_FREE                 (0x09)                                  // è·å–ç©ºé—²å®¹é‡
+#define          FS_GET_ID_LEN               (0x10)                                  // è·å–æŸä¸ªIDé•¿åº¦
+#define          FS_PRINT_LA                 (0x11)                                  // æ‰“å°LAè¡¨
 /**********************************************************************************************************/
-#define          FS_TEST_W1                  (0x21)                                  // Ğ´ÈëÒì³£²âµã1
-#define          FS_TEST_W2                  (0x22)                                  // Ğ´ÈëÒì³£²âµã2
-#define          FS_TEST_W3                  (0x23)                                  // Ğ´ÈëÒì³£²âµã3
-#define          FS_TEST_W4                  (0x24)                                  // Ğ´ÈëÒì³£²âµã4
-#define          FS_TEST_W5                  (0x25)                                  // Ğ´ÈëÒì³£²âµã5
-#define          FS_TEST_E1                  (0x31)                                  // ²Á³ı²âÊÔ1
-#define          FS_TEST_E2                  (0x32)                                  // ²Á³ı²âÊÔ2
-#define          FS_TEST_E3                  (0x33)                                  // ²Á³ı²âÊÔ3
+#define          FS_TEST_W1                  (0x21)                                  // å†™å…¥å¼‚å¸¸æµ‹ç‚¹1
+#define          FS_TEST_W2                  (0x22)                                  // å†™å…¥å¼‚å¸¸æµ‹ç‚¹2
+#define          FS_TEST_W3                  (0x23)                                  // å†™å…¥å¼‚å¸¸æµ‹ç‚¹3
+#define          FS_TEST_W4                  (0x24)                                  // å†™å…¥å¼‚å¸¸æµ‹ç‚¹4
+#define          FS_TEST_W5                  (0x25)                                  // å†™å…¥å¼‚å¸¸æµ‹ç‚¹5
+#define          FS_TEST_E1                  (0x31)                                  // æ“¦é™¤æµ‹è¯•1
+#define          FS_TEST_E2                  (0x32)                                  // æ“¦é™¤æµ‹è¯•2
+#define          FS_TEST_E3                  (0x33)                                  // æ“¦é™¤æµ‹è¯•3
 /**********************************************************************************************************/
 extern           UINT8                        g_user_buf[2048];                      // demo. user data buffer
 extern           UINT32                       fs_pa_free_cnt;                        // free pa cnt;    
@@ -57,7 +40,7 @@ MassStorageState    fs_write_hook(UINT8 *buf, UINT32 byte_cnt)
 {
     printx(FS_TST_DEBUG , "**fs write hook \n");            
 //    fs_write_data(test_id , buf , test_offset , byte_cnt);   
-//  ÉÏÎ»»úBUG,Ã¿´ÎÕû¸öÎÄ¼ş·¢ËÍ£¬ÓÉ³ÌĞò×Ô¼ºÈ¥½âÎö³öÒª¸ü¸ÄµÄÊı¾İ£¬ÕıÊ½°æ±¾·ÏÆú 
+//  ä¸Šä½æœºBUG,æ¯æ¬¡æ•´ä¸ªæ–‡ä»¶å‘é€ï¼Œç”±ç¨‹åºè‡ªå·±å»è§£æå‡ºè¦æ›´æ”¹çš„æ•°æ®ï¼Œæ­£å¼ç‰ˆæœ¬åºŸå¼ƒ 
     fs_write_data(test_id , &buf[test_offset] , test_offset , byte_cnt - test_offset);    
 #if 0
     for(UINT32 i = 0 ;i < byte_cnt ; i++)
