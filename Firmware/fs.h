@@ -1,20 +1,3 @@
-/**********************************************************************************************************
- *   Copyright  SinoChip Semiconductor Tech Corp             							  *
- *   All rights reserved.                                                      							  *
- *--------------------------------------------------------------------------------------------------------*
- *   This confidential and proprietary software must be used
- *   only as authorized by a licensing agreement from SCSemicon, Ltd.
- *   All Rights Reserved.
- * * Copyright    : SCSemicon Tech. Co., Ltd
- * * File name    : fs.h
- * * Description  : file system for cos
- * *
- * * Author       : yuxi sun
- * * Version      : 0.1
- * * Date         : 2020.02.24
- * * History      : none
- * *
-***********************************************************************************************************/
 #ifndef 		   _FS_H
 #define 	       _FS_H 
 #include 	       <sysdep.h>
@@ -23,7 +6,7 @@
 /**********************************************************************************************************/
 #define            FS_DEBUG             (0)
 #define            FS_DEBUG_LV2         (0)
-#define            FS_TEST              (1)                                     // �쳣���Բ��
+#define            FS_TEST              (1)                                     // Òì³£²âÊÔ²âµã
 /**********************************************************************************************************/
 void               fs_trim();
 void               fs_init(void);
